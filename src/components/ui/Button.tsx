@@ -17,7 +17,7 @@ export const Button: React.FC<ButtonProps> = ({
       ? "bg-red-900 text-white hover:bg-red-800"
       : "border border-red-900 text-red-900 hover:bg-red-100";
   return (
-    <button className={`${baseStyle} ${variantStyle} ${className}`}>
+    <button className={`${baseStyle} ${variantStyle} ${className} rounded-2xl`}>
       {label}
     </button>
   );
