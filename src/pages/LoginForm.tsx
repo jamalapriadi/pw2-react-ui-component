@@ -1,0 +1,56 @@
+import { useForm } from "react-hook-form";
+import InputText from "../components/ui/InputText";
+import InputPassword from "../components/ui/InputPassword";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import Button from "../components/ui/Button";
+
+type FormData = {
+  email: string;
+  password: string;
+};
+
+const schema = z.object({
+  email: z.string().min(1, "Email harus diisi"),
+  password: z.string().min(8, "Mimimal 8 Karakter"),
+});
+
+export default function LoginForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+  });
+
+  const onSubmit = (data: FormData) => {
+    console.log(data);
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {/* email */}
+        <InputText
+          label="Email"
+          nama="email"
+          register={register}
+          error={errors.email?.message}
+        />
+
+        {/* password */}
+        <InputPassword
+          label="Password"
+          nama="password"
+          register={register}
+          error={errors.password?.message}
+        />
+
+        {/* button */}
+        <Button label="Login" variant="primary" />
+      </form>
+    </div>
+  );
+}
