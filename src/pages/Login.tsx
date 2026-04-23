@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import InputText from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import InputPassword from "../components/ui/InputPassword";
+import { Link } from "react-router-dom";
 
 type FormData = {
   username: string;
@@ -30,7 +31,7 @@ export default function Login() {
   return (
     <div className="container mx-auto">
       <h1>Login</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <InputText
           label="Username"
           name="username"
@@ -47,6 +48,10 @@ export default function Login() {
 
         <div>
           <Button label="Login" variant="primary" />
+        </div>
+
+        <div>
+          Belum punya akun? <Link to="/register">Daftar Sekarang</Link>
         </div>
       </form>
     </div>
