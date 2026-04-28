@@ -9,18 +9,18 @@ import MainLayout from "./layouts/MainLayout";
 import AuthLayout from "./layouts/AuthLayout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
-import DashboardLayout from "./layouts/DashboardLayout";
-import { useThemeStore } from "./store/useThemeStore";
-import { useEffect } from "react";
-import ProtectedRoute from "./routes/ProtectedRoute";
+import Dashboard from "./pages/dashboard/Dashboard";
+// import DashboardLayout from "./layouts/DashboardLayout";
+// import { useThemeStore } from "./store/useThemeStore";
+// import { useEffect } from "react";
+// import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
-  const isDarkMode = useThemeStore((state) => state.isDarkMode);
+  // const isDarkMode = useThemeStore((state) => state.isDarkMode);
 
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", isDarkMode);
-  }, [isDarkMode]);
+  // useEffect(() => {
+  //   document.documentElement.classList.toggle("dark", isDarkMode);
+  // }, [isDarkMode]);
 
   return (
     <BrowserRouter>
@@ -40,12 +40,7 @@ function App() {
           <Route path="/register" element={<Register />} />
         </Route>
 
-        {/* protected route untuk dashboard */}
-        <Route element={<ProtectedRoute />}>
-          <Route element={<DashboardLayout />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-          </Route>
-        </Route>
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,6 +1,5 @@
 import { Home, Info, Users, HelpCircle } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import ThemeButton from "./ThemeButton";
 
 export const Header: React.FC = () => {
   const menuItems = [
@@ -39,7 +38,7 @@ export const Header: React.FC = () => {
               <span>{item.label}</span>
             </NavLink>
           ))}
-          <ThemeButton />
+          {/* <ThemeButton /> */}
         </div>
       </div>
     </header>

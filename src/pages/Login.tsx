@@ -22,7 +22,6 @@ const schema = z.object({
 
 export default function Login() {
   const navigate = useNavigate();
-  const login = useAuthStore((state) => state.login);
 
   const {
     register,
@@ -32,12 +31,15 @@ export default function Login() {
 
   const onSubmit = (data: FormData) => {
     console.log(data);
-    if (data.username == "admin" && data.password == "admin123") {
+    if (
+      data.username === "admin@gmail.com" &&
+      data.password === "password123"
+    ) {
+      alert("Login Berhasil");
       login(data.username);
-
       navigate("/dashboard");
     } else {
-      alert("Login Gagal");
+      alert("Login Gagal: Username atau Password salah");
     }
   };
 
