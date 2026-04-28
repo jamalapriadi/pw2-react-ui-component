@@ -22,6 +22,7 @@ const schema = z.object({
 
 export default function Login() {
   const navigate = useNavigate();
+  const login = useAuthStore((state) => state.login);
 
   const {
     register,

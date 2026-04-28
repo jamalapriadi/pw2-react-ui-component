@@ -10,6 +10,12 @@ import AuthLayout from "./layouts/AuthLayout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/dashboard/Dashboard";
+import ProtectedRoute from "./route/ProtectedRoute";
+import DashboardLayout from "./layouts/DashboardLayout";
+import CategoryIndex from "./pages/dashboard/kategori/CategoryIndex";
+import EventIndex from "./pages/dashboard/event/EventIndex";
+import PembicaraIndex from "./pages/dashboard/pembicara/PembicaraIndex";
+import CategoryCreate from "./pages/dashboard/kategori/CategoryCreate";
 // import DashboardLayout from "./layouts/DashboardLayout";
 // import { useThemeStore } from "./store/useThemeStore";
 // import { useEffect } from "react";
@@ -40,7 +46,21 @@ function App() {
           <Route path="/register" element={<Register />} />
         </Route>
 
-        <Route path="/dashboard" element={<Dashboard />} />
+        {/* route yang dilindungi, hanya bisa diakses jika sudah login */}
+        <Route element={<ProtectedRoute />}>
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+
+            <Route path="/dashboard/category" element={<CategoryIndex />} />
+            <Route
+              path="/dashboard/category/create"
+              element={<CategoryCreate />}
+            />
+
+            <Route path="/dashboard/event" element={<EventIndex />} />
+            <Route path="/dashboard/pembicara" element={<PembicaraIndex />} />
+          </Route>
+        </Route>
       </Routes>
     </BrowserRouter>
   );
