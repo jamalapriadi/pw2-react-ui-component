@@ -1,9 +1,8 @@
 import { Home, Info, Users, HelpCircle } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import ThemeButton from "./ThemeButton";
 
 export const Header: React.FC = () => {
-  const currentPath = "#";
-
   const menuItems = [
     { label: "Beranda", href: "/", icon: <Home size={18} /> },
     { label: "Competition", href: "/competition", icon: <Info size={18} /> },
@@ -13,11 +12,12 @@ export const Header: React.FC = () => {
     { label: "Login", href: "/login", icon: <HelpCircle size={18} /> },
   ];
 
-  const activeStyle = "text-red-900";
-  const defaultStyle = "text-slate-600 hover:text-red-900";
+  const activeStyle = "text-red-900 dark:text-white";
+  const defaultStyle =
+    "text-slate-600 hover:text-red-900 dark:text-white/80 dark:hover:text-white";
 
   return (
-    <header className=" bg-white shadow-sm px-6 py-2">
+    <header className=" bg-white dark:bg-black shadow-sm px-6 py-2  transition-colors duration-300 ease-in-out">
       <div className="max-w-7xl mx-auto flex justify-between items-center gap-4">
         <div className="logo">
           <img
@@ -39,6 +39,7 @@ export const Header: React.FC = () => {
               <span>{item.label}</span>
             </NavLink>
           ))}
+          <ThemeButton />
         </div>
       </div>
     </header>

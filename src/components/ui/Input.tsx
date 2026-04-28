@@ -13,7 +13,7 @@ const Input: React.FC<InputProps> = ({ label, name, register, error }) => {
         type="text"
         {...register(name)}
         placeholder={label}
-        className="border p-2 rounded-2xl focus:outline-red-800"
+        className={`border rounded-2xl px-3 py-2 outline-none focus:outline-none focus:ring-2 focus:ring-red-500 ${error ? "bg-red-100" : "bg-gray-50"}`}
       />
 
       {error && <p className="text-red-500">{error}</p>}

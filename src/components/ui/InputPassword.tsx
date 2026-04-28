@@ -24,7 +24,7 @@ const InputPassword: React.FC<InputPasswordProps> = ({
           type={show ? "text" : "password"}
           {...register(name)}
           placeholder={label}
-          className="border p-2 rounded-2xl focus:outline-red-800 w-full pr-10 px-3 py-2"
+          className={`border w-full rounded-2xl px-3 py-2 outline-none focus:outline-none focus:ring-2 focus:ring-red-500 ${error ? "bg-red-100" : "bg-gray-50"}`}
         />
 
         <button

@@ -7,6 +7,9 @@ import Button from "../components/ui/Button";
 import InputPassword from "../components/ui/InputPassword";
 import { Link } from "react-router-dom";
 
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/useAuthStore";
+
 type FormData = {
   username: string;
   password: string;
@@ -18,6 +21,9 @@ const schema = z.object({
 });
 
 export default function Login() {
+  const navigate = useNavigate();
+  const login = useAuthStore((state) => state.login);
+
   const {
     register,
     handleSubmit,
@@ -26,6 +32,13 @@ export default function Login() {
 
   const onSubmit = (data: FormData) => {
     console.log(data);
+    if (data.username == "admin" && data.password == "admin123") {
+      login(data.username);
+
+      navigate("/dashboard");
+    } else {
+      alert("Login Gagal");
+    }
   };
 
   return (
