@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import FormInput from "../components/FormInput";
 import Button from "../components/ui/Button";
+import { Link } from "react-router-dom";
 
 const schema = z.object({
   nama: z.string().min(1, "Nama harus diisi"),
@@ -59,6 +60,13 @@ export default function Register() {
           <Button label="Register" variant="primary" />
         </div>
       </form>
+
+      <p className="mt-6">
+        Sudah punya akun?
+        <Link to="/login" className="text-blue-500">
+          Login di sini
+        </Link>
+      </p>
     </div>
   );
 }
