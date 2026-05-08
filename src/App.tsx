@@ -16,6 +16,7 @@ import CategoryIndex from "./pages/dashboard/kategori/CategoryIndex";
 import EventIndex from "./pages/dashboard/event/EventIndex";
 import PembicaraIndex from "./pages/dashboard/pembicara/PembicaraIndex";
 import CategoryCreate from "./pages/dashboard/kategori/CategoryCreate";
+import PembicaraCreate from "./pages/dashboard/pembicara/PembicaraCreate";
 // import DashboardLayout from "./layouts/DashboardLayout";
 // import { useThemeStore } from "./store/useThemeStore";
 // import { useEffect } from "react";
@@ -59,6 +60,10 @@ function App() {
 
             <Route path="/dashboard/event" element={<EventIndex />} />
             <Route path="/dashboard/pembicara" element={<PembicaraIndex />} />
+            <Route
+              path="/dashboard/pembicara/create"
+              element={<PembicaraCreate />}
+            />
           </Route>
         </Route>
       </Routes>
