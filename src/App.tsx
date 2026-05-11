@@ -7,6 +7,12 @@ import Seminar from "./pages/Seminar";
 import Talkshow from "./pages/Talkshow";
 import MainLayout from "./layouts/MainLayout";
 import AuthLayout from "./layouts/AuthLayout";
+import CreateCategory from "./pages/dashboard/categories/CreateCategory";
+import CategoryList from "./pages/dashboard/categories/CategoryList";
+import EventList from "./pages/dashboard/events/EventList";
+import DashboardIndex from "./pages/dashboard/DashboardIndex";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import DashboardLayout from "./layouts/DashboardLayout";
 
 function App() {
   return (
@@ -27,6 +33,19 @@ function App() {
         </Route>
 
         {/* dashboard */}
+        <Route element={<ProtectedRoute />}>
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard" element={<DashboardIndex />} />
+
+            <Route path="/dashboard/category" element={<CategoryList />} />
+            <Route
+              path="/dashboard/category/create"
+              element={<CreateCategory />}
+            />
+
+            <Route path="/dashboard/events" element={<EventList />} />
+          </Route>
+        </Route>
       </Routes>
     </BrowserRouter>
   );

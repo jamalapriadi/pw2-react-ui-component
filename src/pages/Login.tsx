@@ -1,9 +1,18 @@
-import FormInput from "../components/FormInput";
+import FormInput from "../components/ui/FormInput";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Button from "../components/ui/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+import { useAuthStore } from "../store/useAuthStore";
+
+//tentukan form data
+type FormData = {
+  email: string;
+  password: string;
+};
 
 // schema validasi
 const schema = z.object({
@@ -12,6 +21,7 @@ const schema = z.object({
 });
 
 export default function Login() {
+  //hook form
   const {
     register,
     handleSubmit,
@@ -20,32 +30,47 @@ export default function Login() {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const navigate = useNavigate();
+  const login = useAuthStore((state) => state.login);
+
+  //fungsi ketika form di submit
+  const onSubmit = (data: FormData) => {
+    if (data.email == "admin@gmail.com" && data.password == "password123") {
+      //login sukses
+      alert("login sukses");
+
+      login(data.email);
+
+      navigate("/dashboard");
+    } else {
+      //login gagal
+      alert("login gagal");
+    }
   };
 
-  <form onSubmit={handleSubmit(onSubmit)}></form>;
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormInput
-          text="email"
-          tipe="text"
-          name="Email"
+          type="text"
+          label="Email"
+          name="email"
           register={register}
           error={errors.email?.message}
+          placeholder="E-mail"
         />
 
         <FormInput
-          text="password"
-          tipe="password"
-          name="Password"
+          type="password"
+          label="Password"
+          name="password"
           register={register}
           error={errors.password?.message}
+          placeholder="Password"
         />
 
         <div>
-          <Button label="Login" variant="primary" />
+          <button type="submit">Login</button>
         </div>
       </form>
 

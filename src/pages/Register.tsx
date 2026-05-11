@@ -1,10 +1,18 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import FormInput from "../components/FormInput";
 import Button from "../components/ui/Button";
 import { Link } from "react-router-dom";
+import { FormInput } from "../components/ui/FormInput";
 
+type FormData = {
+  nama: string;
+  email: string;
+  password: string;
+  password_confirm: string;
+};
+
+//validasi
 const schema = z.object({
   nama: z.string().min(1, "Nama harus diisi"),
   email: z.string().min(8, "Email minimal 8 angka"),
@@ -25,35 +33,39 @@ export default function Register() {
     <div>
       <form onSubmit={handleSubmit(console.log())}>
         <FormInput
-          text="nama"
-          tipe="text"
-          name="Nama"
+          label="Nama"
+          name="nama"
           register={register}
           error={errors.nama?.message}
+          type="text"
+          placeholder="Nama"
         />
 
         <FormInput
-          text="email"
-          tipe="text"
-          name="Email"
+          label="Email"
+          name="email"
           register={register}
           error={errors.email?.message}
+          type="email"
+          placeholder="Email"
         />
 
         <FormInput
-          text="password"
-          tipe="password"
-          name="Password"
+          label="Password"
+          name="password"
           register={register}
           error={errors.password?.message}
+          type="password"
+          placeholder="Password"
         />
 
         <FormInput
-          text="password_confirm"
-          tipe="password"
-          name="Password Confirm"
+          label="Password Confirm"
+          name="password_confirm"
           register={register}
           error={errors.password_confirm?.message}
+          type="password"
+          placeholder="Password Confirm"
         />
 
         <div>
