@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+
 import Competition from "./pages/Competition";
 import Homepage from "./pages/Homepage";
 import LoginForm from "./pages/LoginForm";
@@ -15,41 +17,45 @@ import CategoryIndex from "./pages/dashboard/category/CategoryIndex";
 import PembicaraIndex from "./pages/dashboard/pembicara/PembicaraIndex";
 import CategoryCreate from "./pages/dashboard/category/CategoryCreate";
 
+const queryClient = new QueryClient();
+
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* untuk website */}
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<Homepage />} />
-          <Route path="/competition" element={<Competition />} />
-          <Route path="/seminar" element={<Seminar />} />
-          <Route path="/talkshow" element={<Talkshow />} />
-          <Route path="/workshop" element={<Workshop />} />
-        </Route>
-
-        {/* untuk login dan register */}
-        <Route element={<AuthLayout />}>
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/register" element={<RegisterForm />} />
-        </Route>
-
-        {/* halaman yang hanya bisa diakses jika sudah login */}
-        <Route element={<ProtectedRoute />}>
-          <Route element={<DashboardLayout />}>
-            <Route path="/dashboard" element={<DashboardIndex />} />
-
-            <Route path="/dashboard/category" element={<CategoryIndex />} />
-            <Route
-              path="/dashboard/category/create"
-              element={<CategoryCreate />}
-            />
-
-            <Route path="/dashboard/pembicara" element={<PembicaraIndex />} />
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Routes>
+          {/* untuk website */}
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/competition" element={<Competition />} />
+            <Route path="/seminar" element={<Seminar />} />
+            <Route path="/talkshow" element={<Talkshow />} />
+            <Route path="/workshop" element={<Workshop />} />
           </Route>
-        </Route>
-      </Routes>
-    </BrowserRouter>
+
+          {/* untuk login dan register */}
+          <Route element={<AuthLayout />}>
+            <Route path="/login" element={<LoginForm />} />
+            <Route path="/register" element={<RegisterForm />} />
+          </Route>
+
+          {/* halaman yang hanya bisa diakses jika sudah login */}
+          <Route element={<ProtectedRoute />}>
+            <Route element={<DashboardLayout />}>
+              <Route path="/dashboard" element={<DashboardIndex />} />
+
+              <Route path="/dashboard/category" element={<CategoryIndex />} />
+              <Route
+                path="/dashboard/category/create"
+                element={<CategoryCreate />}
+              />
+
+              <Route path="/dashboard/pembicara" element={<PembicaraIndex />} />
+            </Route>
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }
 

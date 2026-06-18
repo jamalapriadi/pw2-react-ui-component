@@ -5,9 +5,16 @@ import { InputPassword } from "../components/ui/InputPassword";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Button from "../components/ui/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, type ErrorResponse } from "react-router-dom";
 
 import { useAuthStore } from "../store/useAuthStore";
+
+import {useMutation, useQueryClient} from "@tanstack/react-query"
+import {AxiosError} from "axios"
+
+import type { LoginInput, LoginResponse } from "../types/auth"
+import { api } from "../lib/axios"
+
 
 type FormData = {
   email: string;
@@ -21,6 +28,8 @@ const schema = z.object({
 
 export default function LoginForm() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   const login = useAuthStore((state) => state.login);
 
   const {
@@ -31,18 +40,34 @@ export default function LoginForm() {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
-    if (data.email == "admin@gmail.com" && data.password == "admin123") {
-      alert("Login Berhasil");
+  const loginMutation = useMutation({
+    mutationFn: async(credentials: LoginInput) => {
+      //logic awal
+      const response = await api.post<LoginResponse>("/auth/login", credentials);
 
-      login(data.email);
+      return response.data
+    },
+    onSuccess:(data) =>{
+      //logic jika success
+      login({
+        user: data.user,
+        token: data.token
+      });
 
-      // Redirect ke halaman dashboard
+      queryClient.setQueryData(["me"], data.user);
+
       navigate("/dashboard");
-    } else {
-      alert("Email atau password anda salah!");
+    },
+    onError: (error: AxiosError<ErrorResponse>) =>{
+      //logic jika error
+      const message = error.message || "Terjadi kesalahan"
+
+      alert(`Login Gagal : ${message}`)
     }
+  })
+
+  const onSubmit = (data: FormData) => {
+    loginMutation.mutate(data);
   };
 
   return (
