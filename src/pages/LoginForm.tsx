@@ -5,22 +5,26 @@ import InputPassword from "../components/ui/InputPassword";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Button from "../components/ui/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, type ErrorResponse } from "react-router-dom";
 
 import { useAuthStore } from "../store/useAuthStore";
 
-type FormData = {
-  email: string;
-  password: string;
-};
+import {useMutation, useQueryClient} from "@tanstack/react-query"
+import {AxiosError} from "axios"
+import type {LoginRequest, LoginResponse} from "../types/auth"
+import {api} from "../lib/axios"
+
+type FormData = LoginRequest
 
 const schema = z.object({
-  email: z.string().min(1, "Email harus diisi"),
+  username: z.string().min(1, "Username harus diisi"),
   password: z.string().min(8, "Mimimal 8 Karakter"),
 });
 
 export default function LoginForm() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   const login = useAuthStore((state) => state.login);
 
   const {
@@ -31,16 +35,34 @@ export default function LoginForm() {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (data: FormData) => {
-    if (data.email === "admin@gmail.com" && data.password === "password123") {
-      alert("Login Berhasil");
-      login(data.email);
+  const loginMutation = useMutation({
+    mutationFn: async(credentials: LoginRequest)=>{
+      //logic disini
+      const response = await api.post<LoginResponse>("/auth/login", credentials)
 
-      navigate("/dashboard");
-    } else {
-      alert("Login Gagal, pastikan email dan password benar");
-      return;
+      return response.data
+    },
+    onSuccess :(data) =>{
+      //logic disini
+      login({
+        user: data.user,
+        token: data.token
+      })
+
+      queryClient.setQueryData(["me"], data.user)
+
+      navigate("/dashboard")
+    },
+    onError: (error: AxiosError<ErrorResponse>) =>{
+      //logic disini
+      const message = error.message || 'Terjadi kesalahan saat login'
+
+      alert(`Login Gagal : ${message}`)
     }
+  })
+
+  const onSubmit = (data: FormData) => {
+    loginMutation.mutate(data);
   };
 
   return (
@@ -49,10 +71,10 @@ export default function LoginForm() {
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* email */}
         <InputText
-          label="Email"
-          nama="email"
+          label="Username"
+          nama="username"
           register={register}
-          error={errors.email?.message}
+          error={errors.username?.message}
         />
 
         {/* password */}
