@@ -9,6 +9,11 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { useAuthStore } from "../store/useAuthStore";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {AxiosError} from "axios";
+import type {LoginInput, LoginResponse} from "../types/auth"
+import {api} from "../lib/axios"
+
 type FormData = {
   email: string;
   password: string;
@@ -21,6 +26,8 @@ const schema = z.object({
 
 export default function LoginForm() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   const login = useAuthStore((state) => state.login);
 
   const {
@@ -31,16 +38,34 @@ export default function LoginForm() {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (data: FormData) => {
-    if (data.email === "admin@gmail.com" && data.password === "password123") {
-      alert("Login Berhasil");
-      login(data.email);
+  //login 
+  const loginMutation = useMutation({
+    mutationFn: async (data: LoginInput) => {
+      //logic disini
+      const response = await api.post<LoginResponse>("/auth/login", data);
 
+      return response.data
+    },
+    onSuccess: (data: LoginResponse) => {
+      //jika sukses
+      login({
+        user: data.user,
+        token: data.token
+      })
+
+      //redirect ke dashboard
       navigate("/dashboard");
-    } else {
-      alert("Login Gagal, pastikan email dan password benar");
-      return;
+    },
+    onError: (error: AxiosError) => {
+      //jika error
+      console.log(error);
+
+      alert('Login Gagal, pastikan email dan password benar');
     }
+  })
+
+  const onSubmit = (data: FormData) => {
+    loginMutation.mutate(data)
   };
 
   return (
