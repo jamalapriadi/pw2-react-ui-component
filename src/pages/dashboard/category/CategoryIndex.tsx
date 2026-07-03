@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { api } from "../../../lib/axios";
 
+import {getCategories} from "../../../api/categoryApi"
+
 type Category = {
   id: number;
   name: string;
@@ -9,6 +11,8 @@ type Category = {
 };
 
 export default function CategoryIndex() {
+
+  //tanstack query untuk mengambil data category dari api
   const {
     data: categories = [],
     isLoading,
@@ -16,10 +20,7 @@ export default function CategoryIndex() {
     error,
   } = useQuery<Category[], Error>({
     queryKey: ["categories"],
-    queryFn: async () => {
-      const response = await api.get<Category[]>("/categories");
-      return response.data;
-    },
+    queryFn: getCategories
   });
 
   return (
@@ -42,14 +43,24 @@ export default function CategoryIndex() {
       ) : categories.length === 0 ? (
         <div className="text-gray-500">Belum ada kategori.</div>
       ) : (
-        <div className="grid gap-4">
-          {categories.map((category) => (
-            <div key={category.id} className="p-4 border rounded-lg shadow-sm">
-              <h2 className="text-xl font-semibold">{category.name}</h2>
-            </div>
-          ))}
-        </div>
+        <table className="w-full border-collapse border border-gray-300"> 
+          <thead>
+            <tr>
+              <td>No.</td>
+              <td>Nama Kategori</td>
+            </tr>
+          </thead>
+          <tbody>
+            {categories.map((category, index) => (
+              <tr key={category.id}>
+                <td className="border border-gray-300 px-4 py-2">{index + 1}</td>
+                <td className="border border-gray-300 px-4 py-2">{category.name}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
     </div>
   );
 }
+        
